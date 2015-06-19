@@ -1,7 +1,4 @@
-
 package org.ecabrerar.examples.java8.collections;
-
-
 
 import static org.junit.Assert.*;
 
@@ -30,282 +27,251 @@ import com.google.common.collect.Maps;
 
 /**
  * @author ecabrerar
- * @date   Mar 27, 2015
+ * @date Mar 27, 2015
  */
 public class CollectionsExamples {
 
-	private static final Logger logger =  LoggerFactory.getLogger(CollectionsExamples.class);
+    private static final Logger logger = LoggerFactory.getLogger(CollectionsExamples.class);
 
+    @Test
+    public void convert_list_to_map_with_java() {
 
-	@Test
-	public void convert_list_to_map_with_java () {
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
 
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
+        Map<Integer, MLBTeam> mappedTeams = new HashMap<>();
 
-		Map<Integer, MLBTeam> mappedTeams = new HashMap<>();
+        for (MLBTeam team : teams) {
+            mappedTeams.put(team.getId(), team);
+        }
 
-		for (MLBTeam team : teams) {
-			mappedTeams.put(team.getId(), team);
-		}
+        logger.info(mappedTeams.toString());
 
-		logger.info(mappedTeams.toString());
+        assertTrue(mappedTeams.size() == 3);
+        assertEquals("NY  Mets", mappedTeams.get(2).getName());
+    }
 
-		 assertTrue(mappedTeams.size() == 3);
-		 assertEquals("NY  Mets", mappedTeams.get(2).getName());
-	}
+    @Test
+    public void convert_list_to_map_with_guava() {
 
-	@Test
-	public void convert_list_to_map_with_guava () {
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
 
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
+        Map<Integer, MLBTeam> mappedTeams = Maps.uniqueIndex(teams, new Function<MLBTeam, Integer>() {
 
-		Map<Integer, MLBTeam> mappedTeams = Maps.uniqueIndex(teams, new Function<MLBTeam, Integer>() {
+            @Override
+            public Integer apply(MLBTeam team) {
 
-			@Override
-			public Integer apply(MLBTeam team) {
+                return team.getId();
+            }
+        });
 
-				return team.getId();
-			}
-		});
+        logger.info(mappedTeams.toString());
 
-		logger.info(mappedTeams.toString());
+        assertTrue(mappedTeams.size() == 3);
+        assertEquals("NY  Mets", mappedTeams.get(2).getName());
 
-		assertTrue(mappedTeams.size() == 3);
-		assertEquals("NY  Mets", mappedTeams.get(2).getName());
+    }
 
-	}
+    @Test
+    public void convert_list_to_map_with_java8_lambda() {
 
-	@Test
-	public void convert_list_to_map_with_java8_lambda () {
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
 
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
+        Map<Integer, MLBTeam> mappedTeams = teams.stream().collect(Collectors.toMap(MLBTeam::getId, (p) -> p));
 
+        logger.info(mappedTeams.toString());
 
-		Map<Integer, MLBTeam> mappedTeams = teams.stream().collect(Collectors.toMap(MLBTeam::getId, (p)->p));
+        assertTrue(mappedTeams.size() == 3);
+        assertEquals("NY  Mets", mappedTeams.get(2).getName());
 
-		logger.info(mappedTeams.toString());
+    }
 
-		assertTrue(mappedTeams.size() == 3);
-		assertEquals("NY  Mets", mappedTeams.get(2).getName());
+    @Test
+    public void filter_items_in_list_with_java() {
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
+        teams.add(new MLBTeam(4, "Washington Nationals", false));
 
-	}
+        Collection<MLBTeam> worldSeriesWinners = new ArrayList<>();
 
-	@Test
-	public void filter_items_in_list_with_java () {
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
-		teams.add(new MLBTeam(4, "Washington Nationals", false));
+        for (MLBTeam team : teams) {
 
+            if (team.isHasWonWoldSeries()) {
+                worldSeriesWinners.add(team);
+            }
+        }
 
-		Collection<MLBTeam> worldSeriesWinners = new ArrayList<>();
+        logger.info(worldSeriesWinners.toString());
 
-		for (MLBTeam team : teams) {
+        assertTrue(worldSeriesWinners.size() == 3);
 
-			if(team.isHasWonWoldSeries()){
-				worldSeriesWinners.add(team);
-			}
-		}
+    }
 
-		logger.info(worldSeriesWinners.toString());
+    @Test
+    public void filter_items_in_list_with_guava() {
 
-		assertTrue(worldSeriesWinners.size() == 3);
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
+        teams.add(new MLBTeam(4, "Washington Nationals", false));
 
-	}
+        Collection<MLBTeam> worldSeriesWinners = Collections2.filter(teams, new Predicate<MLBTeam>() {
 
-	@Test
-	public void filter_items_in_list_with_guava () {
+            @Override
+            public boolean apply(MLBTeam team) {
+                return team.isHasWonWoldSeries();
+            }
+        });
 
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
-		teams.add(new MLBTeam(4, "Washington Nationals", false));
+        logger.info(worldSeriesWinners.toString());
 
-		Collection<MLBTeam> worldSeriesWinners = Collections2.filter(teams, new Predicate<MLBTeam>() {
+        assertTrue(worldSeriesWinners.size() == 3);
+    }
 
-			@Override
-			public boolean apply(MLBTeam team) {
-				return team.isHasWonWoldSeries();
-			}
-		});
+    @Test
+    public void filter_items_in_list_with_java8_lambda() {
 
-		logger.info(worldSeriesWinners.toString());
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
+        teams.add(new MLBTeam(4, "Washington Nationals", false));
 
-		assertTrue(worldSeriesWinners.size() == 3);
-	}
+        Collection<MLBTeam> worldSeriesWinners = teams
+                .stream()
+                .filter(p -> p.isHasWonWoldSeries())
+                .collect(Collectors.toList());
 
+        logger.info(worldSeriesWinners.toString());
 
-	@Test
-	public void filter_items_in_list_with_java8_lambda () {
+        assertTrue(worldSeriesWinners.size() == 3);
 
-		List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
-		teams.add(new MLBTeam(4, "Washington Nationals", false));
+    }
 
-		Collection<MLBTeam> worldSeriesWinners = teams
-												.stream()
-												.filter(p->p.isHasWonWoldSeries())
-												.collect(Collectors.toList());
+    @Test
+    public void remove_null_from_list_java() {
 
-		logger.info(worldSeriesWinners.toString());
+        List<String> teams = new ArrayList<>();
+        teams.add(null);
+        teams.add("NY  Mets");
+        teams.add(null);
+        teams.add("Washington Nationals");
+        teams.add("LA  Angels");
+        teams.add(null);
 
-		assertTrue(worldSeriesWinners.size() == 3);
+        teams.removeAll(Collections.singleton(null));
 
-	}
+        assertEquals(3, teams.size());
+    }
 
-	@Test
-	public void remove_null_from_list_java () {
+    @Test
+    public void remove_null_from_list_guava_collections2() {
 
-	    List<String> teams = new ArrayList<>();
-	    teams.add(null);
-	    teams.add("NY  Mets");
-	    teams.add(null);
-	    teams.add("Washington Nationals");
-	    teams.add("LA  Angels");
-	    teams.add(null);
+        List<String> teams = Lists.newArrayList(
+                null, "NY  Mets", null,
+                "Washington Nationals", "LA  Angels", null);
 
-	    teams.removeAll(Collections.singleton(null));
+        Collection<String> filterStrings = Collections2
+                .filter(teams, Predicates.notNull());
 
-	    assertEquals(3, teams.size());
-	}
+        assertEquals(3, filterStrings.size());
+    }
 
+    @Test
+    public void remove_null_from_list_java8_lambda() {
 
-	@Test
-	public void remove_null_from_list_guava_collections2 () {
+        List<String> teams = Lists.newArrayList(
+                null, "NY  Mets", null,
+                "Washington Nationals", "LA  Angels", null);
 
-		List<String> teams = Lists.newArrayList(
-	            null, "NY  Mets", null,
-	            "Washington Nationals", "LA  Angels", null);
+        List<String> filterStrings = teams
+                .stream()
+                .filter(p -> p != null)
+                .collect(Collectors.toList());
 
+        assertEquals(3, filterStrings.size());
 
-	    Collection<String> filterStrings = Collections2
-	            .filter(teams, Predicates.notNull());
+        // or
+        List<String> filterStrings2 = teams
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-	    assertEquals(3, filterStrings.size());
-	}
+        assertEquals(3, filterStrings2.size());
+    }
 
+    @Test
+    public void get_first_element_in_list_with_java() {
 
-	@Test
-	public void remove_null_from_list_java8_lambda () {
+        List<String> teams = new ArrayList<>();
+        teams.add("St. Louis Cardinals");
+        teams.add("NY  Mets");
+        teams.add("LA  Angels");
+        teams.add("Washington Nationals");
 
-	    List<String> teams = Lists.newArrayList(
-	            null, "NY  Mets", null,
-	            "Washington Nationals", "LA  Angels", null);
+        String firstTeam = null;
 
-	    List<String> filterStrings = teams
-	            .stream()
-	            .filter(p -> p != null)
-	            .collect(Collectors.toList());
+        if (!teams.isEmpty() && teams.size() > 0) {
+            firstTeam = teams.get(0);
+        }
 
-	    assertEquals(3, filterStrings.size());
+        assertEquals("St. Louis Cardinals", firstTeam);
+    }
 
-	    // or
-	    List<String> filterStrings2 = teams
-	            .stream()
-	            .filter(Objects::nonNull)
-	            .collect(Collectors.toList());
+    @Test
+    public void get_first_element_in_list_with_guava() {
+        List<String> teams = new ArrayList<>();
+        teams.add("St. Louis Cardinals");
+        teams.add("NY  Mets");
+        teams.add("LA  Angels");
+        teams.add("Washington Nationals");
 
-	    assertEquals(3, filterStrings2.size());
-	}
+        String firstTeam = Iterables.getFirst(teams, null);
 
-	@Test
-	public void get_first_element_in_list_with_java () {
+        assertEquals("St. Louis Cardinals", firstTeam);
+    }
 
-		List<String> teams = new ArrayList<>();
-		teams.add("St. Louis Cardinals");
-		teams.add("NY  Mets");
-		teams.add("LA  Angels");
-		teams.add("Washington Nationals");
+    @Test
+    public void get_first_element_in_list_with_java8() {
 
-		String  firstTeam = null;
+        List<String> teams = new ArrayList<>();
+        teams.add("St. Louis Cardinals");
+        teams.add("NY  Mets");
+        teams.add("LA  Angels");
+        teams.add("Washington Nationals");
 
-	    if (!teams.isEmpty() && teams.size() > 0) {
-	    	firstTeam = teams.get(0);
-	    }
+        Optional<String> firstTeam = teams.stream().findFirst();
 
-	    assertEquals("St. Louis Cardinals", firstTeam);
-	}
+        assertEquals("St. Louis Cardinals", firstTeam.get());
+    }
+  
+    @Test
+    public void find_elements_in_list_with_java() {
 
-	@Test
-	public void get_first_element_in_list_with_guava () {
-		List<String> teams = new ArrayList<>();
-		teams.add("St. Louis Cardinals");
-		teams.add("NY  Mets");
-		teams.add("LA  Angels");
-		teams.add("Washington Nationals");
+        List<Integer> numbers = Lists.newArrayList(1, 2, 3);
 
-		String  firstTeam = Iterables.getFirst(teams, null);
+        Integer value = null;
 
-		assertEquals("St. Louis Cardinals", firstTeam);
-	}
+        for (Integer number : numbers) {
 
+            if (number == 3) {
+                value = number;
+            }
+        }
 
-	@Test
-	public void get_first_element_in_list_with_java8 () {
-
-		List<String> teams = new ArrayList<>();
-		teams.add("St. Louis Cardinals");
-		teams.add("NY  Mets");
-		teams.add("LA  Angels");
-		teams.add("Washington Nationals");
-
-	    Optional<String> firstTeam = teams.stream().findFirst();
-
-	    assertEquals("St. Louis Cardinals", firstTeam.get());
-	}
-
-	@Test
-	public void get_last_element_in_list_with_java () {
-
-	}
-
-	@Test
-	public void get_last_element_in_list_with_guava () {
-
-	}
-
-	@Test
-	public void find_elements_in_list_with_java () {
-
-	    List <Integer> numbers = Lists.newArrayList(
-	            new Integer(1),
-	            new Integer(2),
-	            new Integer(3));
-
-	    Integer value = null;
-
-	    for (Integer number : numbers) {
-
-	    	if (number == 3) {
-	            value = number;
-	        }
-	    }
-
-	    assertEquals(new Integer(3), value);
-	}
-
-	@Test
-	public void find_elements_in_lists_with_guava () {
-
-	}
-
-	@Test
-	public void find_elements_in_list_with_java8_lambda () {
-
-	}
+        assertEquals(new Integer(3), value);
+    }
 
 
 }

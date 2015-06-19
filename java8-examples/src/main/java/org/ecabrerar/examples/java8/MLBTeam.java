@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.ecabrerar.examples.java8;
 
 import com.google.common.base.Objects;

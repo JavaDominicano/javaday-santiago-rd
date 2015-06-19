@@ -17,117 +17,110 @@ import com.google.common.collect.Lists;
 
 /**
  * @author ecabrerar
- * @date   Mar 27, 2015
+ * @date Mar 27, 2015
  */
 public class StreamsExamples {
 
-	@Test
-	public void empty_stream() {
+    @Test
+    public void empty_stream() {
 
-	    Stream<String> emptyStream = Stream.empty();
+        Stream<String> emptyStream = Stream.empty();
 
-	    long val = emptyStream.count();
+        long val = emptyStream.count();
 
-	    assertTrue(val == 0);
-	}
+        assertTrue(val == 0);
+    }
 
+    @Test
+    public void stream_from_array() {
 
-	@Test
-	public void stream_from_array() {
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7};
 
-	    int[] numbers = { 1, 2, 3, 4, 5, 6, 7 };
+        int sum = Arrays.stream(numbers).sum();
 
-	    int sum = Arrays.stream(numbers).sum();
+        assertEquals(28, sum);
+    }
 
-	    assertEquals(28, sum);
-	}
+    @Test
+    public void stream_to_list() {
 
-	@Test
-	public void stream_to_list() {
+        List<String> abc = Stream.of("a", "b", "c")
+                .collect(Collectors.toList());
 
-	    List<String> abc = Stream.of("a", "b", "c")
-	            .collect(Collectors.toList());
+        assertTrue(abc.size() == 3);
+    }
 
-	    assertTrue(abc.size() == 3);
-	}
+    @Test
+    public void terminal_operation_foreach() {
 
-	@Test
-	public void terminal_operation_foreach () {
+        List<String> teams = new ArrayList<>();
+        teams.add("St. Louis Cardinals");
+        teams.add("NY  Mets");
+        teams.add("LA  Angels");
+        teams.add("Washington Nationals");
 
-		List<String> teams = new ArrayList<>();
-		teams.add("St. Louis Cardinals");
-		teams.add("NY  Mets");
-		teams.add("LA  Angels");
-		teams.add("Washington Nationals");
+        teams.forEach(p -> System.out.println(p));
 
-		teams.forEach(p->System.out.println(p));
+    }
 
-	}
+    @Test
+    public void terminal_operation_count() {
 
-	@Test
-	public void terminal_operation_count() {
+        long count = Stream.of("one").count();
 
-		long count = Stream.of("one").count();
+        assertEquals(1, count);
+    }
 
-	    assertEquals(1, count);
-	}
+    @Test
+    public void terminal_operation_anymatch() {
 
+        List<MLBTeam> teams = new ArrayList<>();
+        teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
+        teams.add(new MLBTeam(2, "NY  Mets", true));
+        teams.add(new MLBTeam(3, "LA  Angels", true));
+        teams.add(new MLBTeam(4, "Washington Nationals", false));
+        teams.add(new MLBTeam(4, "LA Dodgers", false));
 
-	@Test
-	public void terminal_operation_anymatch() {
+        boolean hasNotWonWorldSeries = teams.stream().anyMatch(p -> !p.isHasWonWoldSeries());
 
-	    List<MLBTeam> teams = new ArrayList<>();
-		teams.add(new MLBTeam(1, "St. Louis Cardinals", true));
-		teams.add(new MLBTeam(2, "NY  Mets", true));
-		teams.add(new MLBTeam(3, "LA  Angels", true));
-		teams.add(new MLBTeam(4, "Washington Nationals", false));
-		teams.add(new MLBTeam(4, "LA Dodgers", false));
+        assertTrue(hasNotWonWorldSeries);
+    }
 
-	    boolean hasNotWonWorldSeries = teams.stream().anyMatch(p->!p.isHasWonWoldSeries());
+    @Test
+    public void terminal_operation_allmatch() {
 
+        List<String> teams = Lists.newArrayList(
+                "St. Louis Cardinals Team", "NY  Mets Team", "LA  Angels Team", "Washington Nationals Team", "LA Dodgers Team");
 
-	    assertTrue(hasNotWonWorldSeries);
-	}
+        boolean containsAL = teams.stream().allMatch(
+                p -> p.contains("Team"));
 
+        assertTrue(containsAL);
+    }
 
-	@Test
-	public void terminal_operation_allmatch() {
+    @Test
+    public void terminal_operation_nonematch() {
 
+        boolean noElementEqualTo5 = IntStream.of(1, 2, 3)
+                .noneMatch(p -> p == 5);
 
-			List<String> teams = Lists.newArrayList(
-			"St. Louis Cardinals Team","NY  Mets Team","LA  Angels Team","Washington Nationals Team","LA Dodgers Team");
+        assertTrue(noElementEqualTo5);
+    }
 
+    @Test
+    public void terminal_operation_findfirst() {
 
-			boolean containsAL = teams.stream().allMatch(
-					p -> p.contains("Team"));
+        Optional<String> val = Stream.of("one", "two").findFirst();
 
+        assertEquals("one", val);
+    }
 
-	       assertTrue(containsAL);
-	}
+    @Test
+    public void terminal_operation_findany() {
 
-	@Test
-	public void terminal_operation_nonematch() {
+        Optional<String> val = Stream.of("one", "two").findAny();
 
-	    boolean noElementEqualTo5 = IntStream.of(1, 2, 3)
-	            .noneMatch(p -> p == 5);
-
-	    assertTrue(noElementEqualTo5);
-	}
-
-	@Test
-	public void terminal_operation_findfirst() {
-
-	    Optional<String> val = Stream.of("one", "two").findFirst();
-
-	    assertEquals("one", val);
-	}
-
-	@Test
-	public void terminal_operation_findany() {
-
-	    Optional<String> val = Stream.of("one", "two").findAny();
-
-	    assertEquals("one", val.get());
-	}
+        assertEquals("one", val.get());
+    }
 
 }

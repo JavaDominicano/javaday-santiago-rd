@@ -9,7 +9,7 @@ import java.time.Month;
 import java.time.Period;
 import java.util.Calendar;
 
-import org.ecabrerar.examples.java8.DiasFestivosQuery;
+import org.ecabrerar.examples.java8.HolidaysQuery;
 import org.ecabrerar.examples.java8.collections.CollectionsExamples;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -102,7 +102,7 @@ public class WorkingWithDateTime {
 
 	    LocalDate date = LocalDate.of(2014, Month.JANUARY, 26);
 
-	    Boolean isHoliday = date.query(new DiasFestivosQuery());
+	    Boolean isHoliday = date.query(new HolidaysQuery());
 
 	    assertTrue(isHoliday);
 	}
@@ -112,9 +112,8 @@ public class WorkingWithDateTime {
 
 	    LocalDate date = LocalDate.of(2014, Month.NOVEMBER, 10);
 
-	    Boolean isHoliday = date.query(new DiasFestivosQuery());
-
-	    assertFalse(isHoliday);
+	    Boolean isHoliday = date.query(new HolidaysQuery());
+                    assertFalse(isHoliday);
 	}
 
 	@Test

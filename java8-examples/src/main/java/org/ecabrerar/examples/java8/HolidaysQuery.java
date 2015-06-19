@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.ecabrerar.examples.java8;
 
 import java.time.Month;
@@ -15,7 +12,7 @@ import com.google.common.collect.Lists;
  * @author ecabrerar
  * @date   Mar 27, 2015
  */
-public class DiasFestivosQuery implements TemporalQuery<Boolean>{
+public class HolidaysQuery implements TemporalQuery<Boolean>{
 
 	 static List<MonthDay> DIAS_FESTIVOS = Lists.newArrayList(
 	            MonthDay.of(Month.JANUARY, 1), // Año Nuevo
@@ -27,7 +24,7 @@ public class DiasFestivosQuery implements TemporalQuery<Boolean>{
 	            MonthDay.of(Month.AUGUST, 16), //Día Restauración
 	            MonthDay.of(Month.SEPTEMBER, 24), //Día de las Mercedes
 	            MonthDay.of(Month.NOVEMBER, 6), //Día Constitución
-	            MonthDay.of(Month.DECEMBER, 25) // Christmas December 25***
+	            MonthDay.of(Month.DECEMBER, 25) // Christmas December 25
 
 	    );
 
