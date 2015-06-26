@@ -79,7 +79,7 @@ public class StreamsExamples {
         teams.add(new MLBTeam(2, "NY  Mets", true));
         teams.add(new MLBTeam(3, "LA  Angels", true));
         teams.add(new MLBTeam(4, "Washington Nationals", false));
-        teams.add(new MLBTeam(4, "LA Dodgers", false));
+        teams.add(new MLBTeam(5, "LA Dodgers", false));
 
         boolean hasNotWonWorldSeries = teams.stream().anyMatch(p -> !p.isHasWonWoldSeries());
 
@@ -112,7 +112,7 @@ public class StreamsExamples {
 
         Optional<String> val = Stream.of("one", "two").findFirst();
 
-        assertEquals("one", val);
+        assertEquals("one", val.get());
     }
 
     @Test
