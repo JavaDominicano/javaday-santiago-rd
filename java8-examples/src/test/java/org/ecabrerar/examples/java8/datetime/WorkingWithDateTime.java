@@ -49,7 +49,7 @@ public class WorkingWithDateTime {
 	public void difference_between_two_dates_java8_period() {
 
 	    LocalDate sinceJava8Launch = LocalDate.of(2014, Month.MARCH, 18);
-	    LocalDate currentDate = LocalDate.now();
+	    LocalDate currentDate = LocalDate.of(2015, Month.MARCH, 28);
 
 	    Period betweenDates = Period.between(sinceJava8Launch, currentDate);
 
@@ -70,7 +70,7 @@ public class WorkingWithDateTime {
 	public void difference_between_two_dates_java8_duration() {
 
 	    LocalDateTime dateTime = LocalDateTime.of(2014, 3, 18, 0, 0);
-	    LocalDateTime dateTime2 = LocalDateTime.now();
+	    LocalDateTime dateTime2 =  LocalDateTime.of(2015, Month.MARCH, 28,0,0);
 
 	    int diffInNano = java.time.Duration.between(dateTime, dateTime2)
 	            .getNano();
@@ -90,11 +90,11 @@ public class WorkingWithDateTime {
 	    logger.info(String.format(" %d ", diffInMinutes));
 	    logger.info(String.format(" %d ", diffInHours));
 
-	    assertTrue(diffInNano >= 352000000);
-	    assertTrue(diffInSeconds >= 32370947);
-	    assertTrue(diffInMilli >= Long.parseLong("32370947352"));
-	    assertTrue(diffInMinutes >= 539515);
-	    assertTrue(diffInHours >= 8991);
+	    assertTrue(diffInNano >= 0);
+	    assertTrue(diffInSeconds >= 32400000);
+	    assertTrue(diffInMilli >= Long.parseLong("32400000000"));
+	    assertTrue(diffInMinutes >= 540000);
+	    assertTrue(diffInHours >= 9000);
 	}
 
 	@Test
@@ -136,12 +136,18 @@ public class WorkingWithDateTime {
 
 	    int length = date.getMonth().length(true);
 
-	    assertEquals(30, length);
+	    assertEquals(31, length);
 
-	    // or
+	}
+        
+        @Test
+	public void days_in_month_java8_with_lengthOfMonth() {
+
+	    LocalDate date = LocalDate.of(2015, Month.MARCH, 01);
+	   
 	    int length2 = date.lengthOfMonth();
 
-	    assertEquals(30, length2);
+	    assertEquals(31, length2);
 	}
 
 }
